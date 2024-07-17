@@ -2,7 +2,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const filesPath = './task2';
-const email = 'karenfggutierrez@gmail.com';
+const email = 'karengonzalezdev@gmail.com';
 
 async function calculateAndSendHashes() {
   try {
