@@ -4,7 +4,7 @@ const Help = require('./help');
 const GameRules = require('./gameRules');
 
 const args = process.argv.slice(2);
-if (args.length < 3 || args.length % 2  === 0 || new Set(args).size !== args.length) {
+if (args.length < 3 || args.length % 2 === 0 || new Set(args).size !== args.length) {
     console.error('Invalid characters, please provide an odd number major than or equal to 3 of non-repeating strings');
     console.log('Example: node index.js Rock Paper Scissors');
     process.exit(1);
@@ -29,7 +29,7 @@ readline.question('Enter your move: ', (choice) => {
         readline.close();
         process.exit(0);
     }
-    if(choice === '?'){
+    if (choice === '?') {
         Help.genTable(args);
         readline.close();
         process.exit(0);
@@ -48,7 +48,7 @@ readline.question('Enter your move: ', (choice) => {
     console.log(`Key: ${key}`);
     readline.close();
 });
-if(args.includes('--help')) {
+if (args.includes('--help')) {
     Help.genTable(args);
     process.exit(0);
 }
