@@ -1,15 +1,17 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const cors = require('cors');
 
 app.use(express.json());
 
 const corsOptions = {
   origin: 'https://users-authentication-psi.vercel.app',
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  allowedHeaders: "x-access-token, X-Access-Token, Content-Type"
 };
 
 app.use(cors(corsOptions));
