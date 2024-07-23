@@ -1,0 +1,31 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/**/*.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/",
+        "dest": "/api/home.js"
+      },
+      {
+        "src": "/login",
+        "dest": "/api/login.js"
+      },
+      {
+        "src": "/register",
+        "dest": "/api/register.js"
+      },
+      {
+        "src": "/users",
+        "dest": "/api/users.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/api/catchAll.js"
+      }
+    ]
+  }
