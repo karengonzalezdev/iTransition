@@ -9,23 +9,43 @@
     "routes": [
       {
         "src": "/",
-        "dest": "/api/home.js"
+        "dest": "/api/home.js",
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
       },
       {
         "src": "/login",
-        "dest": "/api/login.js"
+        "dest": "/api/login.js",
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
       },
       {
         "src": "/register",
-        "dest": "/api/register.js"
+        "dest": "/api/register.js",
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
       },
       {
         "src": "/users",
-        "dest": "/api/users.js"
+        "dest": "/api/users.js",
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
       },
       {
         "src": "/(.*)",
-        "dest": "/api/catchAll.js"
+        "dest": "/api/catchAll.js",
+        "methods": ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+        "headers": {
+          "Access-Control-Allow-Origin": "*"
+        }
       }
     ]
   }
