@@ -35,7 +35,7 @@ export const LoginPage = () => {
       }
     } catch (error) {
       setErrorAuth(true);
-      console.error(error);
+      console.log(error + "This is the error");
     }
   };
 
