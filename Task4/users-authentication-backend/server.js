@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 const corsOptions = {
-    origin: 'https://users-authentication-psi.vercel.app',
+    origin: '*',
     optionsSuccessStatus: 200
   };
   
