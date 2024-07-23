@@ -26,6 +26,8 @@ export const LoginPage = () => {
         password: password,
       });
 
+      console.log('Response from server:', response);
+
       if (response.data.auth) {
         await login({ user: email });
         localStorage.setItem('token', response.data.token);
