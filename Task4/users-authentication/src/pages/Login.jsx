@@ -21,7 +21,7 @@ export const LoginPage = () => {
     }
 
     try {
-      const response = await axios.post('/login', {
+      const response = await axios.post('https://users-authentication-psi.vercel.app/login', {
         email: email,
         password: password,
       });
