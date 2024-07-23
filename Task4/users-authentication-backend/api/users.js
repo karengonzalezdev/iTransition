@@ -1,53 +1,38 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-app.use(bodyParser.json());
+const mysql = require('mysql2');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
-const users = [
-  { id: 1, name: 'user', email: 'user@example.com', status: 'active' }
-];
+const db = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'itransition123.',
+  database: 'users_authentication'
+});
 
-app.get('/users', (req, res) => {
+db.connect(err => {
+  if (err) throw err;
+  console.log('MySQL Connected...');
+});
+
+const verifyToken = (req, res, next) => {
   const token = req.headers['x-access-token'];
+  if (!token) return res.status(403).send({ auth: false, message: 'No token provided.' });
+  jwt.verify(token, 'secret', (err, decoded) => {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    req.userId = decoded.id;
+    next();
+  });
+};
 
-  if (token) {
-    res.status(200).send(users);
+module.exports = (req, res) => {
+  if (req.method === 'GET') {
+    verifyToken(req, res, () => {
+      db.query('SELECT * FROM users', (err, results) => {
+        if (err) return res.status(500).json({ message: 'Error on the server.' });
+        res.status(200).json(results);
+      });
+    });
   } else {
-    res.status(401).send({ error: 'Unauthorized' });
+    res.status(405).send({ message: 'Method Not Allowed' });
   }
-});
-
-app.patch('/users/:id/block', (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    user.status = 'blocked';
-    res.status(200).send(user);
-  } else {
-    res.status(404).send({ error: 'User not found' });
-  }
-});
-
-app.patch('/users/:id/unblock', (req, res) => {
-  const userId = parseInt(req.params.id);
-  const user = users.find(u => u.id === userId);
-  if (user) {
-    user.status = 'active';
-    res.status(200).send(user);
-  } else {
-    res.status(404).send({ error: 'User not found' });
-  }
-});
-
-app.delete('/users/:id', (req, res) => {
-  const userId = parseInt(req.params.id);
-  const index = users.findIndex(u => u.id === userId);
-  if (index !== -1) {
-    users.splice(index, 1);
-    res.status(200).send({ success: true });
-  } else {
-    res.status(404).send({ error: 'User not found' });
-  }
-});
-
-module.exports = app;
+};

@@ -1,3 +1,7 @@
 module.exports = (req, res) => {
-    res.status(200).send('Welcome to the Home Page!');
-  };
+  if (req.method === 'GET') {
+    res.status(200).send('Hello World! Your server is running.');
+  } else {
+    res.status(405).send({ message: 'Method Not Allowed' });
+  }
+};
