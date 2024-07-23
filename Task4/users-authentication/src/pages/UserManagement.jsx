@@ -15,7 +15,7 @@ export const UserManagement = () => {
         window.location.href = '/login';
         return;
       }
-      
+
       try {
         const response = await axios.get('/users', {
           headers: {
@@ -30,7 +30,7 @@ export const UserManagement = () => {
         }
       }
     };
-  
+
     fetchUsers();
   }, []);
 
@@ -47,7 +47,7 @@ export const UserManagement = () => {
       console.error('Error blocking user:', error);
     }
   };
-  
+
   const handleUnblockUser = async (id) => {
     const token = localStorage.getItem('token');
     try {
@@ -63,10 +63,11 @@ export const UserManagement = () => {
   };
 
   const handleDeleteUser = async (id) => {
+    const token = localStorage.getItem('token');
     try {
       await axios.delete(`/users/${id}`, {
         headers: {
-          'x-access-token': localStorage.getItem('token'),
+          'x-access-token': token,
         },
       });
       setUsers(users.filter((u) => u.id !== id));
@@ -127,13 +128,13 @@ export const UserManagement = () => {
           className="btn btn-secondary me-2" 
           onClick={() => handleBulkAction('unblock')}
         >
-          <i className="bi bi-unlock"></i> Unblock
+          Unblock
         </button>
         <button 
           className="btn btn-danger" 
           onClick={() => handleBulkAction('delete')}
         >
-          <i className="bi bi-trash"></i> Delete
+          Delete
         </button>
       </div>
       <table className="table">

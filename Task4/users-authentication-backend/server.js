@@ -7,11 +7,12 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    credentials: true,
-}));
+const corsOptions = {
+    origin: 'https://users-authentication-psi.vercel.app',
+    optionsSuccessStatus: 200
+  };
+  
+  app.use(cors(corsOptions));
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
