@@ -1,54 +1,54 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "api/**/*.js",
-        "use": "@vercel/node"
-      }
-    ],
-    "rewrites": [
-      {
-        "src": "/",
-        "dest": "/api/home.js"
-      },
-      {
-        "src": "/login",
-        "dest": "/api/login.js"
-      },
-      {
-        "src": "/register",
-        "dest": "/api/register.js"
-      },
-      {
-        "src": "/users",
-        "dest": "/api/users.js"
-      },
-      {
-        "src": "/(.*)",
-        "dest": "/api/catchAll.js"
-      }
-    ],
-    "headers": [
-      {
-        "source": "/(.*)",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Credentials",
-            "value": "true"
-          },
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "*"
-          },
-          {
-            "key": "Access-Control-Allow-Methods",
-            "value": "GET, OPTIONS, PATCH, DELETE, POST, PUT"
-          },
-          {
-            "key": "Access-Control-Allow-Headers",
-            "value": "x-access-token, X-Access-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Credentials"
-          }
-        ]
-      }
-    ]
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/api/home.js"
+    },
+    {
+      "source": "/login",
+      "destination": "/api/login.js"
+    },
+    {
+      "source": "/register",
+      "destination": "/api/register.js"
+    },
+    {
+      "source": "/users",
+      "destination": "/api/users.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/api/catchAll.js"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Credentials",
+          "value": "true"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, OPTIONS, PATCH, DELETE, POST, PUT"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "x-access-token, X-Access-Token, Content-Type, Content-Length, Authorization, Access-Control-Allow-Headers, Accept, Access-Control-Allow-Methods, Access-Control-Allow-Origin, Access-Control-Allow-Credentials"
+        }
+      ]
+    }
+  ]
+}
