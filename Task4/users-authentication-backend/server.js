@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+require('dotenv').config(); // Cargar variables de entorno
 
 const app = express();
 app.use(express.json());
@@ -10,14 +11,17 @@ app.use(express.json());
 const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
-  };
+};
   
-  app.use(cors(corsOptions));
+app.use(cors(corsOptions));
+
+// Leer JWT_SECRET de las variables de entorno
+const jwtSecret = process.env.JWT_SECRET || 'default_secret';
 
 const verifyToken = (req, res, next) => {
     const token = req.headers['x-access-token'];
     if (!token) return res.status(403).send({ auth: false, message: 'No token provided.' });
-    jwt.verify(token, 'secret', (err, decoded) => {
+    jwt.verify(token, jwtSecret, (err, decoded) => {
         if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
         req.userId = decoded.id;
         next();
@@ -28,7 +32,8 @@ const db = mysql.createConnection({
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
+    database: process.env.DB_NAME,
+    connectTimeout: 10000
 });
 
 db.connect(err => {
@@ -53,7 +58,7 @@ app.post('/login', (req, res) => {
         const user = results[0];
         const passwordIsValid = bcrypt.compareSync(password, user.password);
         if (!passwordIsValid) return res.status(401).json({ auth: false, token: null });
-        const token = jwt.sign({ id: user.id }, 'secret', { expiresIn: 86400 });
+        const token = jwt.sign({ id: user.id }, jwtSecret, { expiresIn: 86400 });
         res.status(200).json({ auth: true, token: token });
     });
 });
