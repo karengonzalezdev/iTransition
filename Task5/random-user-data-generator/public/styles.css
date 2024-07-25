@@ -1,0 +1,50 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin: 0 auto;
+    padding: 20px;
+    width: 95%;
+}
+
+table {
+    width: 100%;
+    max-width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed;
+}
+
+table,
+th,
+td {
+    border: 1px solid #a748ff;
+}
+
+th,
+td {
+    padding: 8px;
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+th {
+    background-color: #3d1661;
+    color: white;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+.control-group {
+    margin-bottom: 10px;
+}
+
+table td {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
