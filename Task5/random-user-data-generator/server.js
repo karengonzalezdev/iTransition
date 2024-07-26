@@ -10,6 +10,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 app.use(cors());
+
 const regionData = {
   USA: fakerEN,
   France: fakerFR,
@@ -18,46 +19,69 @@ const regionData = {
   Sweden: fakerSV,
   Russia: fakerRU
 };
+
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+const seedRandom = (seed) => {
+  const seedRandom = require('seed-random');
+  return seedRandom(seed);
+};
+
 const generateUserData = (region, errors, seed, page, recordsPerPage) => {
   const faker = regionData[region] || fakerEN;
-  faker.seed(seed + page);
+  const random = seedRandom(seed);
+  faker.seed(seed);
   let data = [];
   for (let i = 0; i < recordsPerPage; i++) {
     let user = {
       index: i + 1,
       identifier: faker.string.uuid(),
       name: `${faker.person.firstName()} ${faker.person.middleName() || ''} ${faker.person.lastName()}`,
-      address: `${faker.location.city()}, ${faker.location.streetAddress()}, ${faker.location.secondaryAddress() || ''}`,
+      address: truncateString(`${faker.location.city()}, ${faker.location.streetAddress()}, ${faker.location.secondaryAddress() || ''}`, 100),
       phone: faker.phone.number()
     };
-    data.push(applyErrors(user, errors));
+    data.push(applyErrors(user, errors, random));
   }
   return data;
 };
 
-const applyErrors = (user, errors) => {
+const applyErrors = (user, errors, random) => {
+  if (errors <= 0) return user;
   const errorTypes = ['delete', 'add', 'swap'];
-  for (let i = 0; i < errors; i++) {
-    const errorType = errorTypes[Math.floor(Math.random() * errorTypes.length)];
-    const fields = ['name', 'address', 'phone'];
-    const field = fields[Math.floor(Math.random() * fields.length)];
-    if (user[field]) {
-      user[field] = introduceError(user[field], errorType);
+  const fields = ['name', 'address', 'phone'];
+  if (errors < 10) {
+    const errorProbability = errors / 10;
+    fields.forEach(field => {
+      if (user[field]) {
+        const fieldLength = user[field].length;
+        for (let i = 0; i < fieldLength; i++) {
+          if (random() < errorProbability) {
+            user[field] = introduceError(user[field], errorTypes[Math.floor(random() * errorTypes.length)], random);
+          }
+        }
+      }
+    });
+  } else {
+    const maxErrors = Math.min(errors, 1000);
+    for (let i = 0; i < maxErrors; i++) {
+      fields.forEach(field => {
+        if (user[field]) {
+          user[field] = introduceError(user[field], errorTypes[Math.floor(random() * errorTypes.length)], random);
+        }
+      });
     }
   }
   return user;
 };
 
-const introduceError = (value, errorType) => {
-  const pos = Math.floor(Math.random() * value.length);
-  const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+const introduceError = (value, errorType, random) => {
+  const pos = Math.floor(random() * value.length);
+  const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   switch (errorType) {
     case 'delete':
       return value.slice(0, pos) + value.slice(pos + 1);
     case 'add':
-      return value.slice(0, pos) + alphabet[Math.floor(Math.random() * alphabet.length)] + value.slice(pos);
+      return value.slice(0, pos) + alphabet[Math.floor(random() * alphabet.length)] + value.slice(pos);
     case 'swap':
       if (pos < value.length - 1) {
         return value.slice(0, pos) + value[pos + 1] + value[pos] + value.slice(pos + 2);
@@ -66,6 +90,10 @@ const introduceError = (value, errorType) => {
     default:
       return value;
   }
+};
+
+const truncateString = (str, maxLength) => {
+  return str.length > maxLength ? str.slice(0, maxLength) + '...' : str;
 };
 
 app.get('/users', (req, res) => {

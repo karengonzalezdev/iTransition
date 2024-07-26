@@ -10,14 +10,12 @@ const randomSeedButton = document.getElementById('random-seed');
 const exportCsvButton = document.getElementById('export-csv');
 const tableBody = document.querySelector('#user-table tbody');
 const loadingIndicator = document.getElementById('loading');
-
 let currentPage = 1;
 let totalRecords = 0;
 let lastIndex = 0;
 const recordsPerPage = 20;
 let seedValue = generateRandomSeed();
 let isFetching = false;
-let displayedData = [];
 
 const fetchData = async () => {
     if (isFetching) return;
@@ -25,13 +23,11 @@ const fetchData = async () => {
     const region = regionSelect.value;
     const errors = errorNumber.value;
     const timestamp = new Date().getTime();
-    console.log('Fetching data for region:', region);
     loadingIndicator.style.display = 'block';
     try {
         const response = await fetch(`/users?region=${region}&errors=${errors}&seed=${seedValue}&page=${currentPage}&recordsPerPage=${currentPage === 1 ? 20 : 10}&t=${timestamp}`);
         if (!response.ok) throw new Error('Network response was not ok.');
         const data = await response.json();
-        console.log('Data fetched:', data);
         if (currentPage === 1) {
             tableBody.innerHTML = '';
             lastIndex = 0;
@@ -81,12 +77,14 @@ regionSelect.addEventListener('change', () => {
 });
 
 errorSlider.addEventListener('input', () => {
-    errorNumber.value = errorSlider.value;
+    const value = Math.max(parseFloat(errorSlider.value), 0);
+    errorNumber.value = value;
     fetchData();
 });
 
 errorNumber.addEventListener('input', () => {
-    const value = Math.min(errorNumber.value, 1000);
+    let value = parseFloat(errorNumber.value);
+    value = isNaN(value) ? 0 : Math.max(0, Math.min(value, 1000));
     errorNumber.value = value;
     errorSlider.value = value;
     fetchData();
@@ -104,11 +102,9 @@ exportCsvButton.addEventListener('click', () => {
     displayedData.forEach(user => {
         csvContent += `${globalIndex++},${user.identifier},"${user.name}","${user.address}","${user.phone}"\n`;
     });
-
     if (csvContent.endsWith('\n')) {
         csvContent = csvContent.slice(0, -1);
     }
-
     const encodedUri = encodeURI(csvContent);
     const link = document.createElement('a');
     link.setAttribute('href', encodedUri);
@@ -122,6 +118,8 @@ seedInput.addEventListener('input', () => {
     const value = parseInt(seedInput.value, 10);
     if (!isNaN(value)) {
         setSeed(value);
+    } else if (seedInput.value === '') {
+        setSeed(0);
     }
 });
 

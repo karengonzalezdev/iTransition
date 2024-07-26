@@ -48,3 +48,10 @@ table td {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+th:first-child,
+td:first-child {
+    width: 50px;
+    max-width: 50px;
+    min-width: 50px;
+}
