@@ -46,10 +46,19 @@ const generateUserData = (region, errors, seed, page, recordsPerPage) => {
 };
 
 const applyErrors = (user, errors, random) => {
-  if (errors <= 0) return user;
+  if (errors === 0) return user;
   const errorTypes = ['delete', 'add', 'swap'];
   const fields = ['name', 'address', 'phone'];
-  if (errors < 10) {
+  if (errors === 10) {
+    const maxErrors = Math.min(10, 1000);
+    for (let i = 0; i < maxErrors; i++) {
+      fields.forEach(field => {
+        if (user[field]) {
+          user[field] = introduceError(user[field], errorTypes[Math.floor(random() * errorTypes.length)], random);
+        }
+      });
+    }
+  } else if (errors < 10) {
     const errorProbability = errors / 10;
     fields.forEach(field => {
       if (user[field]) {
@@ -98,7 +107,7 @@ const truncateString = (str, maxLength) => {
 
 app.get('/users', (req, res) => {
   const { region, errors, seed, page, recordsPerPage } = req.query;
-  const seedValue = Math.max(0, parseInt(seed));  // Asegurar que seed no sea menor a 0
+  const seedValue = Math.max(0, parseInt(seed));
   const userData = generateUserData(region, parseFloat(errors), seedValue, parseInt(page), parseInt(recordsPerPage));
   res.json(userData);
 });

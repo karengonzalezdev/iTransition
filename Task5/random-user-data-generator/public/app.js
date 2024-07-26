@@ -77,16 +77,18 @@ regionSelect.addEventListener('change', () => {
 });
 
 errorSlider.addEventListener('input', () => {
-    const value = Math.max(parseFloat(errorSlider.value), 0);
+    const value = Math.round(parseFloat(errorSlider.value) * 2) / 2;
     errorNumber.value = value;
+    currentPage = 1;
     fetchData();
 });
 
 errorNumber.addEventListener('input', () => {
-    let value = parseFloat(errorNumber.value);
+    let value = Math.round(parseFloat(errorNumber.value) * 2) / 2;
     value = isNaN(value) ? 0 : Math.max(0, Math.min(value, 1000));
     errorNumber.value = value;
-    errorSlider.value = value;
+    errorSlider.value = Math.min(value, 10);
+    currentPage = 1;
     fetchData();
 });
 
