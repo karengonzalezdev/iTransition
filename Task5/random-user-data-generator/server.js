@@ -98,7 +98,8 @@ const truncateString = (str, maxLength) => {
 
 app.get('/users', (req, res) => {
   const { region, errors, seed, page, recordsPerPage } = req.query;
-  const userData = generateUserData(region, parseFloat(errors), parseInt(seed), parseInt(page), parseInt(recordsPerPage));
+  const seedValue = Math.max(0, parseInt(seed));  // Asegurar que seed no sea menor a 0
+  const userData = generateUserData(region, parseFloat(errors), seedValue, parseInt(page), parseInt(recordsPerPage));
   res.json(userData);
 });
 

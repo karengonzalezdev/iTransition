@@ -115,7 +115,7 @@ exportCsvButton.addEventListener('click', () => {
 });
 
 seedInput.addEventListener('input', () => {
-    const value = parseInt(seedInput.value, 10);
+    const value = Math.max(0, parseInt(seedInput.value, 10));
     if (!isNaN(value)) {
         setSeed(value);
     } else if (seedInput.value === '') {
