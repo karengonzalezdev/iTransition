@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
-require('dotenv').config(); // Cargar variables de entorno
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
@@ -12,10 +12,9 @@ const corsOptions = {
     origin: '*',
     optionsSuccessStatus: 200
 };
-  
+
 app.use(cors(corsOptions));
 
-// Leer JWT_SECRET de las variables de entorno
 const jwtSecret = process.env.JWT_SECRET || 'default_secret';
 
 const verifyToken = (req, res, next) => {

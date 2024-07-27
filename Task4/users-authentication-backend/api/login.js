@@ -4,7 +4,7 @@ const app = express();
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-require('dotenv').config(); // Asegúrate de cargar las variables de entorno
+require('dotenv').config();
 
 app.use(express.json());
 

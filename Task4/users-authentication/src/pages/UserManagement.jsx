@@ -15,7 +15,6 @@ export const UserManagement = () => {
         window.location.href = '/login';
         return;
       }
-
       try {
         const response = await axios.get('/users', {
           headers: {
@@ -30,7 +29,6 @@ export const UserManagement = () => {
         }
       }
     };
-
     fetchUsers();
   }, []);
 
@@ -92,7 +90,6 @@ export const UserManagement = () => {
     const checked = event.target.checked;
     const updatedUsers = users.map(user => (user.id === id ? { ...user, selected: checked } : user));
     setUsers(updatedUsers);
-
     const allSelected = updatedUsers.every(user => user.selected);
     setSelectAll(allSelected);
   };
