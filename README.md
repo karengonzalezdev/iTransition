@@ -1,2 +1,2 @@
 # iTransition
-Frontend course at iTransition, task 3.
+Frontend internship at iTransition
