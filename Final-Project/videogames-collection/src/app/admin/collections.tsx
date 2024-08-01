@@ -1,7 +1,7 @@
-const ComponentName = () => {
-return (
-<div>ComponentName</div>
-);
+const CollectionsAdmin = () => {
+    return (
+        <div>CollectionsAdmin</div>
+    );
 }
 
-export default ComponentName;
+export default CollectionsAdmin;
